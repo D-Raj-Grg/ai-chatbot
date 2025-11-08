@@ -220,7 +220,7 @@ const ChatBotDemo = () => {
                 </PromptInputSelectContent>
               </PromptInputSelect>
             </PromptInputTools>
-            <PromptInputSubmit disabled={!input && !status} status={status} />
+            <PromptInputSubmit disabled={!input || status === 'submitted' || status === 'streaming'} status={status} />
           </PromptInputFooter>
         </PromptInput>
       </div>
