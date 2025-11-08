@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8b5cf6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#6366f1;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background circle -->
+  <circle cx="50" cy="50" r="48" fill="url(#gradient)"/>
+
+  <!-- AI Brain icon -->
+  <g transform="translate(50, 50)">
+    <!-- Central neural node -->
+    <circle cx="0" cy="0" r="6" fill="white"/>
+
+    <!-- Top node -->
+    <circle cx="0" cy="-20" r="5" fill="white" opacity="0.9"/>
+    <line x1="0" y1="-6" x2="0" y2="-15" stroke="white" stroke-width="2" opacity="0.7"/>
+
+    <!-- Bottom node -->
+    <circle cx="0" cy="20" r="5" fill="white" opacity="0.9"/>
+    <line x1="0" y1="6" x2="0" y2="15" stroke="white" stroke-width="2" opacity="0.7"/>
+
+    <!-- Left node -->
+    <circle cx="-20" cy="0" r="5" fill="white" opacity="0.9"/>
+    <line x1="-6" y1="0" x2="-15" y2="0" stroke="white" stroke-width="2" opacity="0.7"/>
+
+    <!-- Right node -->
+    <circle cx="20" cy="0" r="5" fill="white" opacity="0.9"/>
+    <line x1="6" y1="0" x2="15" y2="0" stroke="white" stroke-width="2" opacity="0.7"/>
+
+    <!-- Diagonal nodes -->
+    <circle cx="-14" cy="-14" r="4" fill="white" opacity="0.8"/>
+    <line x1="-4" y1="-4" x2="-10" y2="-10" stroke="white" stroke-width="1.5" opacity="0.6"/>
+
+    <circle cx="14" cy="-14" r="4" fill="white" opacity="0.8"/>
+    <line x1="4" y1="-4" x2="10" y2="-10" stroke="white" stroke-width="1.5" opacity="0.6"/>
+
+    <circle cx="-14" cy="14" r="4" fill="white" opacity="0.8"/>
+    <line x1="-4" y1="4" x2="-10" y2="10" stroke="white" stroke-width="1.5" opacity="0.6"/>
+
+    <circle cx="14" cy="14" r="4" fill="white" opacity="0.8"/>
+    <line x1="4" y1="4" x2="10" y2="10" stroke="white" stroke-width="1.5" opacity="0.6"/>
+  </g>
+</svg>
