@@ -38,21 +38,32 @@ const PromptInputContext = React.createContext<PromptInputContextValue>({
   multiple: false,
 });
 
-interface PromptInputProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onSubmit'> {
+interface PromptInputProps extends Omit<React.FormHTMLAttributes<HTMLFormElement>, 'onSubmit'> {
   onSubmit?: (message: PromptInputMessage) => void;
   globalDrop?: boolean;
   multiple?: boolean;
 }
 
-export const PromptInput = React.forwardRef<HTMLDivElement, PromptInputProps>(
+export const PromptInput = React.forwardRef<HTMLFormElement, PromptInputProps>(
   ({ className, children, onSubmit, globalDrop, multiple, ...props }, ref) => {
     const [files, setFiles] = React.useState<File[]>([]);
+    const [text, setText] = React.useState('');
+
+    const handleSubmit = (e: React.FormEvent) => {
+      e.preventDefault();
+      if (onSubmit && (text.trim() || files.length > 0)) {
+        onSubmit({ text: text.trim(), files });
+        setText('');
+        setFiles([]);
+      }
+    };
 
     return (
       <PromptInputContext.Provider
         value={{ files, setFiles, onSubmit, globalDrop, multiple }}
       >
-        <div
+        <form
+          onSubmit={handleSubmit}
           ref={ref}
           className={cn(
             'rounded-lg border bg-background shadow-sm',
@@ -60,8 +71,30 @@ export const PromptInput = React.forwardRef<HTMLDivElement, PromptInputProps>(
           )}
           {...props}
         >
-          {children}
-        </div>
+          {React.Children.map(children, (child) => {
+            if (React.isValidElement(child) && child.type === PromptInputBody) {
+              const childProps = child.props as any;
+              return React.cloneElement(child, {
+                children: React.Children.map(childProps.children, (bodyChild: any) => {
+                  if (React.isValidElement(bodyChild) && bodyChild.type === PromptInputTextarea) {
+                    const bodyChildProps = bodyChild.props as any;
+                    return React.cloneElement(bodyChild, {
+                      value: text,
+                      onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+                        setText(e.target.value);
+                        if (bodyChildProps.onChange) {
+                          bodyChildProps.onChange(e);
+                        }
+                      },
+                    } as any);
+                  }
+                  return bodyChild;
+                }),
+              } as any);
+            }
+            return child;
+          })}
+        </form>
       </PromptInputContext.Provider>
     );
   }
@@ -138,7 +171,7 @@ interface PromptInputTextareaProps
 export const PromptInputTextarea = React.forwardRef<
   HTMLTextAreaElement,
   PromptInputTextareaProps
->(({ className, ...props }, ref) => {
+>(({ className, onKeyDown, ...props }, ref) => {
   const textareaRef = React.useRef<HTMLTextAreaElement>(null);
 
   React.useImperativeHandle(ref, () => textareaRef.current!);
@@ -151,6 +184,19 @@ export const PromptInputTextarea = React.forwardRef<
     }
   }, [props.value]);
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      const form = e.currentTarget.closest('form');
+      if (form) {
+        form.requestSubmit();
+      }
+    }
+    if (onKeyDown) {
+      onKeyDown(e);
+    }
+  };
+
   return (
     <textarea
       ref={textareaRef}
@@ -159,6 +205,7 @@ export const PromptInputTextarea = React.forwardRef<
         className
       )}
       placeholder="Type a message..."
+      onKeyDown={handleKeyDown}
       {...props}
     />
   );

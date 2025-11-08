@@ -66,7 +66,6 @@ const models = [
 ];
 
 const ChatBotDemo = () => {
-  const [input, setInput] = useState('');
   const [model, setModel] = useState<string>(models[0].value);
   const [webSearch, setWebSearch] = useState(false);
   const { messages, sendMessage, status, regenerate } = useChat();
@@ -91,7 +90,6 @@ const ChatBotDemo = () => {
         },
       },
     );
-    setInput('');
   };
 
   return (
@@ -182,10 +180,7 @@ const ChatBotDemo = () => {
             </PromptInputAttachments>
           </PromptInputHeader>
           <PromptInputBody>
-            <PromptInputTextarea
-              onChange={(e) => setInput(e.target.value)}
-              value={input}
-            />
+            <PromptInputTextarea />
           </PromptInputBody>
           <PromptInputFooter>
             <PromptInputTools>
@@ -220,7 +215,7 @@ const ChatBotDemo = () => {
                 </PromptInputSelectContent>
               </PromptInputSelect>
             </PromptInputTools>
-            <PromptInputSubmit disabled={!input || status === 'submitted' || status === 'streaming'} status={status} />
+            <PromptInputSubmit disabled={status === 'submitted' || status === 'streaming'} status={status} />
           </PromptInputFooter>
         </PromptInput>
       </div>
