@@ -38,7 +38,7 @@ const PromptInputContext = React.createContext<PromptInputContextValue>({
   multiple: false,
 });
 
-interface PromptInputProps extends React.HTMLAttributes<HTMLDivElement> {
+interface PromptInputProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onSubmit'> {
   onSubmit?: (message: PromptInputMessage) => void;
   globalDrop?: boolean;
   multiple?: boolean;
@@ -167,7 +167,7 @@ PromptInputTextarea.displayName = 'PromptInputTextarea';
 
 export const PromptInputAttachments = React.forwardRef<
   HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement> & {
+  Omit<React.HTMLAttributes<HTMLDivElement>, 'children'> & {
     children: (file: File) => React.ReactNode;
   }
 >(({ className, children, ...props }, ref) => {
