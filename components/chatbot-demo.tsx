@@ -48,12 +48,20 @@ import { Loader } from '@/components/ai-elements/loader';
 
 const models = [
   {
-    name: 'GPT 4o',
-    value: 'openai/gpt-4o',
+    name: 'GPT-4o',
+    value: 'gpt-4o',
   },
   {
-    name: 'Deepseek R1',
-    value: 'deepseek/deepseek-r1',
+    name: 'GPT-4o Mini',
+    value: 'gpt-4o-mini',
+  },
+  {
+    name: 'GPT-4 Turbo',
+    value: 'gpt-4-turbo',
+  },
+  {
+    name: 'GPT-3.5 Turbo',
+    value: 'gpt-3.5-turbo',
   },
 ];
 

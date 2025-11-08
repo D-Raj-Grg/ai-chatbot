@@ -42,24 +42,98 @@ export function useChat() {
 
     setMessages((prev) => [...prev, userMessage]);
 
-    // Simulate AI response
-    setTimeout(() => {
+    try {
+      // Call the API route
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          messages: [
+            ...messages.map((msg) => ({
+              role: msg.role,
+              content: msg.parts.find((p) => p.type === 'text')?.text || '',
+            })),
+            {
+              role: 'user',
+              content: message.text || '',
+            },
+          ],
+          model: options?.body?.model || 'gpt-4o',
+          webSearch: options?.body?.webSearch || false,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to get response from API');
+      }
+
       setStatus('streaming');
 
-      const aiMessage: Message = {
+      // Read the streaming response
+      const reader = response.body?.getReader();
+      const decoder = new TextDecoder();
+      let accumulatedText = '';
+
+      const aiMessageId = (Date.now() + 1).toString();
+
+      if (reader) {
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+
+          const chunk = decoder.decode(value);
+          const lines = chunk.split('\n');
+
+          for (const line of lines) {
+            if (line.startsWith('0:')) {
+              try {
+                const jsonStr = line.substring(2);
+                const data = JSON.parse(jsonStr);
+                if (data && typeof data === 'string') {
+                  accumulatedText += data;
+
+                  // Update the message with accumulated text
+                  setMessages((prev) => {
+                    const filtered = prev.filter((m) => m.id !== aiMessageId);
+                    return [
+                      ...filtered,
+                      {
+                        id: aiMessageId,
+                        role: 'assistant',
+                        parts: [{ type: 'text', text: accumulatedText }],
+                      },
+                    ];
+                  });
+                }
+              } catch (e) {
+                // Skip invalid JSON lines
+              }
+            }
+          }
+        }
+      }
+
+      setStatus('idle');
+    } catch (error) {
+      console.error('Error sending message:', error);
+
+      // Add error message
+      const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
         parts: [
           {
             type: 'text',
-            text: `This is a demo response to: "${message.text}". To connect to a real AI model, you'll need to set up an API route with your preferred AI provider (OpenAI, Anthropic, etc.) and update the useChat hook.`,
+            text: 'Sorry, I encountered an error processing your request. Please try again.',
           },
         ],
       };
 
-      setMessages((prev) => [...prev, aiMessage]);
+      setMessages((prev) => [...prev, errorMessage]);
       setStatus('idle');
-    }, 1000);
+    }
   };
 
   const regenerate = () => {
@@ -70,7 +144,15 @@ export function useChat() {
 
       if (lastUserMessage) {
         const text = lastUserMessage.parts.find((p) => p.type === 'text')?.text;
-        setMessages((prev) => prev.filter((m) => m.role === 'user'));
+        // Remove the last assistant message
+        setMessages((prev) => {
+          const lastAssistantIndex = [...prev].reverse().findIndex((m) => m.role === 'assistant');
+          if (lastAssistantIndex !== -1) {
+            const actualIndex = prev.length - 1 - lastAssistantIndex;
+            return prev.slice(0, actualIndex);
+          }
+          return prev;
+        });
         sendMessage({ text });
       }
     }

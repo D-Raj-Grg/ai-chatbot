@@ -31,7 +31,7 @@ export default function Home() {
                 {[
                   {
                     title: 'Advanced AI Models',
-                    description: 'Choose from GPT-4o, Deepseek R1, and more cutting-edge models',
+                    description: 'Powered by OpenAI GPT-4o and other cutting-edge models',
                     icon: '🤖',
                   },
                   {
@@ -86,7 +86,7 @@ export default function Home() {
                   </span>
                 </h2>
                 <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-                  Start a conversation and experience the power of AI
+                  Experience real-time AI conversations powered by OpenAI&apos;s latest models. Ask me anything!
                 </p>
               </div>
 
