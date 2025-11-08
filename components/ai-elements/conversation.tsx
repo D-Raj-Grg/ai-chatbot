@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { ArrowDown } from 'lucide-react';
 
 const ConversationContext = React.createContext<{
-  scrollRef: React.RefObject<HTMLDivElement>;
+  scrollRef: React.RefObject<HTMLDivElement | null>;
 }>({
   scrollRef: { current: null },
 });
