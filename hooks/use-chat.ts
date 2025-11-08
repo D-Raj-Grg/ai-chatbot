@@ -83,34 +83,24 @@ export function useChat() {
           const { done, value } = await reader.read();
           if (done) break;
 
-          const chunk = decoder.decode(value);
-          const lines = chunk.split('\n');
+          // Decode the chunk - it's plain text, not JSON
+          const chunk = decoder.decode(value, { stream: true });
 
-          for (const line of lines) {
-            if (line.startsWith('0:')) {
-              try {
-                const jsonStr = line.substring(2);
-                const data = JSON.parse(jsonStr);
-                if (data && typeof data === 'string') {
-                  accumulatedText += data;
+          if (chunk) {
+            accumulatedText += chunk;
 
-                  // Update the message with accumulated text
-                  setMessages((prev) => {
-                    const filtered = prev.filter((m) => m.id !== aiMessageId);
-                    return [
-                      ...filtered,
-                      {
-                        id: aiMessageId,
-                        role: 'assistant',
-                        parts: [{ type: 'text', text: accumulatedText }],
-                      },
-                    ];
-                  });
-                }
-              } catch (e) {
-                // Skip invalid JSON lines
-              }
-            }
+            // Update the message immediately with accumulated text
+            setMessages((prev) => {
+              const filtered = prev.filter((m) => m.id !== aiMessageId);
+              return [
+                ...filtered,
+                {
+                  id: aiMessageId,
+                  role: 'assistant',
+                  parts: [{ type: 'text', text: accumulatedText }],
+                },
+              ];
+            });
           }
         }
       }
