@@ -21,8 +21,12 @@ interface SendMessageOptions {
   };
 }
 
-export function useChat() {
-  const [messages, setMessages] = useState<Message[]>([]);
+interface UseChatOptions {
+  initialMessages?: Message[];
+}
+
+export function useChat(options?: UseChatOptions) {
+  const [messages, setMessages] = useState<Message[]>(options?.initialMessages || []);
   const [status, setStatus] = useState<'idle' | 'submitted' | 'streaming'>('idle');
 
   const sendMessage = async (

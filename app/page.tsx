@@ -1,6 +1,12 @@
 import { Header } from "@/components/header";
 import { HeroSection } from "@/components/hero-section";
 import ChatBotDemo from "@/components/chatbot-demo";
+import { StatsSection } from "@/components/stats-section";
+import { TestimonialsSection } from "@/components/testimonials-section";
+import { PricingSection } from "@/components/pricing-section";
+import { FAQSection } from "@/components/faq-section";
+import { CTASection } from "@/components/cta-section";
+import { Footer } from "@/components/footer";
 
 export default function Home() {
   return (
@@ -100,6 +106,18 @@ export default function Home() {
           </div>
         </section>
 
+        {/* Stats Section */}
+        <StatsSection />
+
+        {/* Testimonials Section */}
+        <TestimonialsSection />
+
+        {/* Pricing Section */}
+        <PricingSection />
+
+        {/* FAQ Section */}
+        <FAQSection />
+
         {/* About Section */}
         <section id="about" className="py-20 bg-muted/30">
           <div className="container mx-auto px-4">
@@ -130,25 +148,12 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Footer */}
-        <footer className="py-12 border-t bg-background">
-          <div className="container mx-auto px-4">
-            <div className="text-center space-y-4">
-              <div className="flex items-center justify-center gap-2">
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-purple-600 flex items-center justify-center">
-                  <span className="text-white font-bold text-lg">AI</span>
-                </div>
-                <span className="text-xl font-bold bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
-                  ChatBot
-                </span>
-              </div>
-              <p className="text-muted-foreground">
-                &copy; {new Date().getFullYear()} AI ChatBot. Built with Next.js and shadcn/ui.
-              </p>
-            </div>
-          </div>
-        </footer>
+        {/* CTA Section */}
+        <CTASection />
       </main>
+
+      {/* Footer */}
+      <Footer />
     </div>
   );
 }
