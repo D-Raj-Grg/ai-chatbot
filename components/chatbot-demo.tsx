@@ -65,10 +65,35 @@ const models = [
   },
 ];
 
+const initialMessages = [
+  {
+    id: 'welcome-1',
+    role: 'assistant' as const,
+    parts: [
+      {
+        type: 'text' as const,
+        text: "Hello! I'm your AI assistant. I'm here to help you with questions, brainstorming, coding, writing, and more. How can I assist you today?",
+      },
+    ],
+  },
+  {
+    id: 'welcome-2',
+    role: 'assistant' as const,
+    parts: [
+      {
+        type: 'text' as const,
+        text: "You can:\n\n- Ask me questions about any topic\n- Get help with coding and debugging\n- Brainstorm ideas and solutions\n- Write and edit content\n- Enable web search for real-time information\n- Choose from different AI models\n\nWhat would you like to explore?",
+      },
+    ],
+  },
+];
+
 const ChatBotDemo = () => {
   const [model, setModel] = useState<string>(models[0].value);
   const [webSearch, setWebSearch] = useState(false);
-  const { messages, sendMessage, status, regenerate } = useChat();
+  const { messages, sendMessage, status, regenerate } = useChat({
+    initialMessages,
+  });
 
   const handleSubmit = (message: PromptInputMessage) => {
     const hasText = Boolean(message.text);

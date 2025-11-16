@@ -22,10 +22,10 @@ export function Header() {
   }, []);
 
   const navItems = [
-    { name: 'Home', href: '#home' },
-    { name: 'Features', href: '#features' },
-    { name: 'Chat', href: '#chat' },
-    { name: 'About', href: '#about' },
+    { name: 'Home', href: '/' },
+    { name: 'Features', href: '/#features' },
+    { name: 'Chat', href: '/chat' },
+    { name: 'Pricing', href: '/#pricing' },
   ];
 
   return (
@@ -100,8 +100,8 @@ export function Header() {
               transition={{ delay: 0.3 }}
               className="hidden md:block"
             >
-              <Button className="bg-gradient-to-r from-primary to-purple-600 hover:opacity-90">
-                Get Started
+              <Button asChild className="bg-gradient-to-r from-primary to-purple-600 hover:opacity-90">
+                <a href="/chat">Get Started</a>
               </Button>
             </motion.div>
 
@@ -141,8 +141,8 @@ export function Header() {
                   <a href={item.href}>{item.name}</a>
                 </Button>
               ))}
-              <Button className="bg-gradient-to-r from-primary to-purple-600 hover:opacity-90 w-full">
-                Get Started
+              <Button asChild className="bg-gradient-to-r from-primary to-purple-600 hover:opacity-90 w-full">
+                <a href="/chat">Get Started</a>
               </Button>
             </nav>
           </motion.div>

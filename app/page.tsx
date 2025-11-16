@@ -1,6 +1,8 @@
 import { Header } from "@/components/header";
 import { HeroSection } from "@/components/hero-section";
 import ChatBotDemo from "@/components/chatbot-demo";
+import { TestimonialsSection } from "@/components/testimonials-section";
+import { PricingSection } from "@/components/pricing-section";
 
 export default function Home() {
   return (
@@ -99,6 +101,12 @@ export default function Home() {
             </div>
           </div>
         </section>
+
+        {/* Testimonials Section */}
+        <TestimonialsSection />
+
+        {/* Pricing Section */}
+        <PricingSection />
 
         {/* About Section */}
         <section id="about" className="py-20 bg-muted/30">
